@@ -6,9 +6,9 @@ export const site = {
   basePath: "/Info/",
   favicon: "/favicon.svg",
   pfp: "https://i.imgur.com/i2cw7NA.jpeg",
-  email: "nothingnappudae@gmail.com",
+  email: "Nothing-nappudae@proton.me",
   socials: {
-    github: "https://github.com/nothing-nappudae",
+    github: "https://github.com/NothinReal",
     discord: "https://discord.gg/",
   },
   ctas: [
