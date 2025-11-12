@@ -6,7 +6,7 @@ export const site = {
   basePath: "/Info/",
   favicon: "/favicon.svg",
   pfp: "https://i.imgur.com/i2cw7NA.jpeg",
-  email: "nothingnapuddae@gmail.com",
+  email: "nothingnappudae@gmail.com",
   socials: {
     github: "https://github.com/nothing-nappudae",
     discord: "https://discord.gg/",
