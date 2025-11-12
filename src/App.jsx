@@ -12,7 +12,8 @@ import Footer from "./components/Footer.jsx";
 import Now from "./components/Now.jsx";
 import Starfield from "./components/Starfield.jsx";
 import CursorGlow from "./components/CursorGlow.jsx";
-import Animation from "./assets/Animation.gif"; // 👈 your Eriski demo GIF
+import PlanetsLayer from "./components/PlanetsLayer.jsx";
+import Animation from "./assets/Animation.gif";
 
 /* ---------------------- Theme persistence ---------------------- */
 function useTheme() {
@@ -108,7 +109,6 @@ export default function App() {
   const sectionIds = site.sections.map((s) => s.id);
   const active = useScrollSpy(sectionIds);
 
-  // Lightbox state
   const [lightbox, setLightbox] = useState({
     open: false,
     title: "",
@@ -116,16 +116,14 @@ export default function App() {
     alt: "",
   });
 
-  // When user clicks "More info" on a project card
   const handleMoreInfo = (item) => {
-    // Show Animation.gif specifically for Eriski
     const isEriski =
       item?.slug === "eriski" ||
       (item?.title ?? "").toLowerCase().includes("eriski");
 
     const src = isEriski
       ? Animation
-      : item?.media || item?.gif || item?.image || Animation; // fallback
+      : item?.media || item?.gif || item?.image || Animation;
 
     setLightbox({
       open: true,
@@ -137,29 +135,26 @@ export default function App() {
 
   return (
     <div className="relative">
-      {/* Background & FX (behind all content) */}
-      <Starfield />
-      <CursorGlow />
-
+      {/* 🌌 Background stack */}
+      <PlanetsLayer count={7} /> {/* floating planets */}
+      <Starfield /> {/* twinkling stars */}
+      <CursorGlow /> {/* mouse glow */}
+      {/* UI */}
       <Header
         sections={site.sections}
         active={active}
         theme={theme}
         onToggle={() => setTheme(theme === "dark" ? "light" : "dark")}
       />
-
       <main id="main" className="mx-auto max-w-6xl px-4">
-        {/* Home */}
         <Section id="home">
           <Hero />
         </Section>
 
-        {/* Highlights */}
         <Section id="featured" title="Highlights 🔥">
           <FeaturedGrid items={site.featured} />
         </Section>
 
-        {/* Projects */}
         <Section id="projects" title="Projects">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {site.projects.map((p) => (
@@ -167,42 +162,35 @@ export default function App() {
                 key={p.title}
                 item={p}
                 compact
-                onMoreInfo={() => handleMoreInfo(p)} // 👈 wire the click
+                onMoreInfo={() => handleMoreInfo(p)}
               />
             ))}
           </div>
         </Section>
 
-        {/* Skills */}
         <Section id="skills" title="Skills">
           <Skills />
         </Section>
 
-        {/* Now */}
         <Section id="now" title={site.now.heading}>
           <Now now={site.now} />
         </Section>
 
-        {/* Reading */}
         <Section id="reading" title="Reading">
           <ReadingList items={site.reading} />
         </Section>
 
-        {/* Hobbies */}
         <Section id="hobbies" title="Hobbies">
           <HobbiesStrip items={site.hobbies} />
           <div id="back-to-fun" aria-hidden="true" />
         </Section>
 
-        {/* Contact */}
         <Section id="contact" title="Contact">
           <Contact />
         </Section>
       </main>
-
       <Footer />
-
-      {/* Lightbox */}
+      {/* Lightbox modal */}
       <Lightbox
         open={lightbox.open}
         onClose={() => setLightbox((s) => ({ ...s, open: false }))}

@@ -3,8 +3,12 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Github, Info } from "lucide-react";
 import Animation from "../assets/Animation.gif"; // 👈 Eriski demo GIF
 
+/* ===========================
+   Featured Projects Grid
+   =========================== */
 export default function FeaturedGrid({ items }) {
   const prefersReducedMotion = useReducedMotion();
+
   return (
     <div className="grid gap-6 md:grid-cols-2">
       {items.map((it) => (
@@ -19,6 +23,9 @@ export default function FeaturedGrid({ items }) {
   );
 }
 
+/* ===========================
+   Tech Chips
+   =========================== */
 function TechChips({ list }) {
   if (!list?.length) return null;
   return (
@@ -35,17 +42,21 @@ function TechChips({ list }) {
   );
 }
 
+/* ===========================
+   Individual Project Card
+   =========================== */
 export function Card({ item, compact, prefersReducedMotion }) {
   const [open, setOpen] = useState(false);
 
-  // If item has its own media, use it; otherwise show Animation.gif for Eriski
+  // Identify Eriski & set media
   const isEriski =
     (item?.slug ?? "").toLowerCase() === "eriski" ||
     (item?.title ?? "").toLowerCase().includes("eriski");
+
   const mediaSrc = item?.media ?? (isEriski ? Animation : null);
   const mediaAlt = item?.mediaAlt ?? `${item?.title ?? "Project"} demo`;
 
-  // Close on ESC + lock body scroll when modal is open
+  // Handle ESC & body scroll lock
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => e.key === "Escape" && setOpen(false);
@@ -68,7 +79,9 @@ export function Card({ item, compact, prefersReducedMotion }) {
       <p className="mt-2 text-sm text-neutral-700 dark:text-neutral-300">
         {item.blurb}
       </p>
+
       <TechChips list={item.tech} />
+
       <div className="mt-4 flex flex-wrap gap-2">
         {item.repo && item.repo !== "#" && (
           <a
@@ -103,12 +116,13 @@ export function Card({ item, compact, prefersReducedMotion }) {
         {content}
       </motion.div>
 
+      {/* Lightbox Modal */}
       {open && (
         <div
           role="dialog"
           aria-modal="true"
           aria-label={`${item.title} details`}
-          className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4"
+          className="fixed inset-0 z-50 grid place-items-center bg-black/60 backdrop-blur-sm p-4"
           onClick={() => setOpen(false)}
         >
           <div
@@ -119,28 +133,28 @@ export function Card({ item, compact, prefersReducedMotion }) {
             <div className="flex items-start justify-between gap-4 border-b border-neutral-800 px-6 py-4">
               <h4 className="text-lg font-semibold">{item.title}</h4>
               <button
-                className="rounded-lg border border-neutral-700 px-2 py-1 text-sm focus-ring"
+                className="rounded-lg border border-neutral-700 px-2 py-1 text-sm focus-ring hover:bg-neutral-800"
                 onClick={() => setOpen(false)}
                 aria-label="Close"
               >
-                Close
+                ✕
               </button>
             </div>
 
-            {/* Media (GIF) */}
+            {/* Media */}
             {mediaSrc && (
               <div className="max-h-[70vh] overflow-auto bg-black">
                 <img
                   src={mediaSrc}
                   alt={mediaAlt}
-                  className="mx-auto h-auto w-full"
+                  className="mx-auto h-auto w-full object-contain"
                 />
               </div>
             )}
 
-            {/* Text */}
+            {/* Text content */}
             {item.more && (
-              <div className="px-6 py-4 text-sm text-neutral-300">
+              <div className="px-6 py-4 text-sm text-neutral-300 whitespace-pre-line">
                 {item.more}
               </div>
             )}
@@ -151,5 +165,5 @@ export function Card({ item, compact, prefersReducedMotion }) {
   );
 }
 
-// attach for reuse in Projects grid
+/* Allow Card access externally (e.g., Projects grid) */
 FeaturedGrid.Card = Card;
